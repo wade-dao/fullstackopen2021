@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Numbers from './components/Numbers'
 import Search from './components/Search'
 import AddNew from './components/AddNew'
+import Notification from './components/Notification'
 
 import personService from './services/persons.js'
 
@@ -11,6 +12,10 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ search, setSearch ] = useState('')
   const [ displays, setDisplays ]  = useState([])
+  const [ errorMessage, setErrorMessage] = useState({
+    content: '',
+    type: true
+  })
 
   useEffect(() => {
     // console.log('effect')
@@ -33,6 +38,12 @@ const App = () => {
       name: newName,
       number: newNumber
     }
+
+    const empMsg = {
+      content: '',
+      type: true
+    }
+
     const names = persons.map(person => person.name)
     if (names.includes(newName))
     {
@@ -50,7 +61,25 @@ const App = () => {
             setNewNumber('')
             setSearch('')
             setDisplays(newPersons)
-        })
+            const suc = {
+              content: `Updated ${response.data.name}`,
+              type: true
+            }
+            setErrorMessage(suc)
+            setTimeout(() => {
+              setErrorMessage(empMsg)
+            }, 3000)
+          })
+          .catch(error => {
+            const err = {
+              content: `Information of ${newPerson.name} has already been removed from server.`,
+              type: false
+            }
+            setErrorMessage(err)
+            setTimeout(() => {
+              setErrorMessage(empMsg)
+            }, 5000)
+          })
       }
       
     }
@@ -63,7 +92,25 @@ const App = () => {
           setNewNumber('')
           setSearch('')
           setDisplays(persons.concat(response.data))
-      })
+          const suc = {
+            content: `Added ${response.data.name}`,
+            type: true
+          }
+          setErrorMessage(suc)
+          setTimeout(() => {
+            setErrorMessage(empMsg)
+          }, 3000)
+        })
+        .catch(error => {
+          const err = {
+            content: `Information about ${error}`,
+            type: false
+          }
+          setErrorMessage(err)
+          setTimeout(() => {
+            setErrorMessage(empMsg)
+          }, 5000)
+        })
     }
   }
 
@@ -109,6 +156,8 @@ const App = () => {
 
   return (
     <div>
+      <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
       <Search search={search} handleSearchChange={handleSearchChange} />
       <AddNew addNewPerson={addNewPerson} handleNameChange={handleNameChange} newName={newName} 
                                           handleNumberChange={handleNumberChange} newNumber={newNumber} />
