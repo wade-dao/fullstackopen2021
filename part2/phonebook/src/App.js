@@ -3,7 +3,7 @@ import Numbers from './components/Numbers'
 import Search from './components/Search'
 import AddNew from './components/AddNew'
 
-import axios from 'axios'
+import personService from './services/persons.js'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -13,38 +13,58 @@ const App = () => {
   const [ displays, setDisplays ]  = useState([])
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
+    // console.log('effect')
+    personService
+      .getAll()
       .then(response => {
-        console.log('promise fulfilled')
+        // console.log('promise fulfilled')
         setPersons(response.data)
         setDisplays(response.data)
       })
   }, [])
-  console.log('render', displays.length, 'numbers')
+  // console.log('render', displays.length, 'numbers')
 
   const addNewPerson = (event) => {
     event.preventDefault()
     if (newName === '' || newNumber === '')
       return
     
-    const names = persons.map(person => person.name)
-    if (names.includes(newName))
-    {
-      alert(`${newName} is already added to phonebook`)
-      return
-    }
-  
     const newPerson = {
       name: newName,
       number: newNumber
     }
-    setPersons(persons.concat(newPerson))
-    setNewName('')
-    setNewNumber('')
-    setSearch('')
-    setDisplays(persons.concat(newPerson))
+    const names = persons.map(person => person.name)
+    if (names.includes(newName))
+    {
+      if (window.confirm(newName + " is already added to the phonebook, replace the old number with a new one? ")) {
+        const index = names.indexOf(newName)
+        const id = persons[index].id
+        personService
+          .update(id, newPerson)
+          .then(response => {
+            // console.log("update successful", response.data)
+            let newPersons = [...persons]
+            newPersons[index].number = response.data.number
+            setPersons(newPersons)
+            setNewName('')
+            setNewNumber('')
+            setSearch('')
+            setDisplays(newPersons)
+        })
+      }
+      
+    }
+    else {
+      personService
+        .create(newPerson)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setNewName('')
+          setNewNumber('')
+          setSearch('')
+          setDisplays(persons.concat(response.data))
+      })
+    }
   }
 
   const handleNameChange = (event) => {
@@ -70,12 +90,29 @@ const App = () => {
     setDisplays(searchResult)
   }
 
+  const handleDelete = (id, name) => {
+    if (window.confirm("Delete " + name + " ?")) {
+      personService
+        .deletePerson(id)
+        .then(response => {
+          const afterDelete = persons.filter((item) => {
+            return item.id !== id
+          })
+          setPersons(afterDelete)
+          setNewName('')
+          setNewNumber('')
+          setSearch('')
+          setDisplays(afterDelete)
+      })
+    }
+  }
+
   return (
     <div>
       <Search search={search} handleSearchChange={handleSearchChange} />
       <AddNew addNewPerson={addNewPerson} handleNameChange={handleNameChange} newName={newName} 
                                           handleNumberChange={handleNumberChange} newNumber={newNumber} />
-      <Numbers persons={displays} />
+      <Numbers persons={displays} handleDelete={handleDelete}/>
     </div>
   )
 }
