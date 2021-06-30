@@ -44,14 +44,23 @@ const App = () => {
       type: true
     }
 
-    const names = persons.filter(person => {
+    let duplicates = []
+    let updates = []
+    let updatedIndex = 0
+    persons.forEach((person, index) => {
       if (person.name === newName && person.number === newNumber) {
-        return person
+        duplicates = duplicates.concat(person)
+        return
       }
-      else return null
+      
+      if (person.name === newName && person.number !== newNumber) {
+        updates = updates.concat(person)
+        updatedIndex = index
+        return
+      }
     })
     
-    if (names.length > 0)
+    if (duplicates.length > 0)
     {
       const err = {
         content: `This entry already exists.`,
@@ -64,9 +73,37 @@ const App = () => {
         setErrorMessage(empMsg)
       }, 2500)
     }
-    else {
-      personService
-      .create(newPerson)
+    else if (updates.length > 0) {
+      personService.update(updates[0].id, newPerson)
+        .then(response => {
+          const updatedPersons = [...persons]
+          updatedPersons[updatedIndex].number = newPerson.number
+          setPersons(updatedPersons)
+          setNewName('')
+          setNewNumber('')
+          setSearch('')
+          setDisplays(updatedPersons)
+          const suc = {
+            content: `Updated ${newPerson.name}.`,
+            type: true
+          }
+          setErrorMessage(suc)
+          setTimeout(() => {
+            setErrorMessage(empMsg)
+          }, 3000)
+        })
+        .catch(error => {
+          const err = {
+            content: `Information about ${error}`,
+            type: false
+          }
+          setErrorMessage(err)
+          setTimeout(() => {
+            setErrorMessage(empMsg)
+          }, 5000)
+        })
+    } else {
+      personService.create(newPerson)
       .then(response => {
         setPersons(persons.concat(response.data))
         setNewName('')

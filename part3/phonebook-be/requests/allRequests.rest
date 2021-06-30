@@ -2,10 +2,19 @@
 GET http://localhost:3001/api/persons
 
 ###Delete a person
-DELETE http://localhost:3001/api/persons/4
+DELETE http://localhost:3001/api/persons/60dc508b205b7319dec94f0d
 
 ###Add new person
 POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Ben Simmons", 
+    "number": "25"
+}
+
+###Update person
+PUT http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
