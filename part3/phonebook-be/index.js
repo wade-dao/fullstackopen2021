@@ -5,6 +5,9 @@ const cors = require('cors')
 
 const app = express()
 
+//serve static front-end from 'build' folder
+app.use(express.static('build'))
+
 app.use(express.json())
 app.use(cors())
 
