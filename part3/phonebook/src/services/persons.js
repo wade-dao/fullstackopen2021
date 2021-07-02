@@ -22,6 +22,6 @@ const exportedObject = {
   create,
   update,
   deletePerson
-};
+}
 
-export default exportedObject;
+export default exportedObject

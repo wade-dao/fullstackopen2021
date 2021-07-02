@@ -9,15 +9,15 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "Ben Simmons", 
-    "number": "25"
+    "name": "Joel Embiid", 
+    "number": "12345678"
 }
 
 ###Update person
-PUT http://localhost:3001/api/persons
+PUT http://localhost:3001/api/persons/60dec9e3b8432e09e60e1a6d
 Content-Type: application/json
 
 {
-    "name": "Ben Simmons", 
-    "number": "25"
+    "name": "Joel Embiid", 
+    "number": "1234"
 }

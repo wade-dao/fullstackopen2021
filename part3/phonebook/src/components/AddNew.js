@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AddNew = ({addNewPerson, handleNameChange, newName, handleNumberChange, newNumber}) => {
+const AddNew = ({ addNewPerson, handleNameChange, newName, handleNumberChange, newNumber }) => {
   return (
     <div>
       <h3>Add a new</h3>

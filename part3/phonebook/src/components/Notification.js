@@ -9,11 +9,11 @@ const Notification = ({ message }) => {
     padding: 10,
     marginBottom: 10
   }
-  
-  let success = {...defaultStyle}
+
+  let success = { ...defaultStyle }
   success.color = 'green'
 
-  let error = {...defaultStyle}
+  let error = { ...defaultStyle }
   error.color = 'red'
 
   if (message.content === null || message.content === '') {

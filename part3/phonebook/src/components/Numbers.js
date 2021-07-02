@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Person = ({person, handleDelete}) => {
+const Person = ({ person, handleDelete }) => {
   return (
     <tr>
       <td>{person.name}</td>
@@ -9,8 +9,8 @@ const Person = ({person, handleDelete}) => {
     </tr>
   )
 }
-const Persons = ({persons, handleDelete}) => {
-  const people = persons.map((person, index) => <Person key={person.id} person={person} handleDelete={handleDelete}/>)
+const Persons = ({ persons, handleDelete }) => {
+  const people = persons.map((person) => <Person key={person.id} person={person} handleDelete={handleDelete}/>)
   return (
     <table>
       <tbody>
@@ -20,7 +20,7 @@ const Persons = ({persons, handleDelete}) => {
   )
 }
 
-const Numbers = ({persons, handleDelete}) => {
+const Numbers = ({ persons, handleDelete }) => {
   return (
     <div>
       <h3>Numbers</h3>
