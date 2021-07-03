@@ -1,4 +1,4 @@
-const dummy = (blogs) => {
+const dummy = () => {
   // ...
   return 1
 }
@@ -19,7 +19,7 @@ const favoriteBlog = (blogs) => {
     return blogs[0]
 
   let favorite = blogs.reduce((max, current) => {
-   return max.likes > current.likes ? max : current
+    return max.likes > current.likes ? max : current
   }, blogs[0])
 
   return favorite
@@ -28,7 +28,7 @@ const favoriteBlog = (blogs) => {
 const mostBlogs = (blogs) => {
   if (blogs.length === 0)
     return null
-    
+
   if (blogs.length === 1)
     return { author: blogs[0].author, blogs: 1 }
 
@@ -40,7 +40,7 @@ const mostBlogs = (blogs) => {
     if (authors.includes(blog.author)) {
       const curAuthor = authors.indexOf(blog.author)
       blogsCount[curAuthor] += 1
-      
+
       if (blogsCount[curAuthor] > mostBlogsCount) {
         mostBlogsCount = blogsCount[curAuthor]
         mostBlogsIndex = curAuthor
@@ -58,7 +58,7 @@ const mostBlogs = (blogs) => {
 const mostLikes = (blogs) => {
   if (blogs.length === 0)
     return null
-    
+
   if (blogs.length === 1)
     return { author: blogs[0].author, likes: blogs[0].likes }
 
@@ -70,7 +70,7 @@ const mostLikes = (blogs) => {
     if (authors.includes(blog.author)) {
       const curAuthor = authors.indexOf(blog.author)
       likesCount[curAuthor] += blog.likes
-      
+
       if (likesCount[curAuthor] > mostLikesCount) {
         mostLikesCount = likesCount[curAuthor]
         mostLikesIndex = curAuthor
