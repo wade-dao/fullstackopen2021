@@ -187,6 +187,37 @@ describe('most blogs', () => {
     expect(result).toEqual({ author: 'Edsger W. Dijkstra', blogs: 1})
   })
 
+  const listWithOneAuthor = [
+    {
+      _id: "5a422a851b54a676234d17f7",
+      title: "React patterns",
+      author: "Michael Chan",
+      url: "https://reactpatterns.com/",
+      likes: 7,
+      __v: 0
+    },
+    {
+      _id: "5a422a851b54a676234d17f7",
+      title: "React patterns",
+      author: "Michael Chan",
+      url: "https://reactpatterns.com/",
+      likes: 7,
+      __v: 0
+    },
+    {
+      _id: "5a422a851b54a676234d17f7",
+      title: "React patterns",
+      author: "Michael Chan",
+      url: "https://reactpatterns.com/",
+      likes: 7,
+      __v: 0
+    }
+  ]
+  test('of a list with one author is the same author', () => {
+    const result = listHelper.mostBlogs(listWithOneAuthor)
+    expect(result).toEqual({ author: 'Michael Chan', blogs: 3})
+  })
+
   const biggerList = [
     {
       _id: "5a422a851b54a676234d17f7",
