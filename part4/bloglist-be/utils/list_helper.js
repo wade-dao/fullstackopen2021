@@ -25,8 +25,39 @@ const favoriteBlog = (blogs) => {
   return favorite
 }
 
+const mostBlogs = (blogs) => {
+  if (blogs.length === 0)
+    return null
+    
+  if (blogs.length === 1)
+    return { author: blogs[0].author, blogs: 1 }
+
+  let authors = []
+  let blogsCount = []
+  let mostBlogsIndex = 0
+  let mostBlogsCount = 0
+  blogs.forEach((blog, index) => {
+    if (authors.includes(blog.author)) {
+      const curAuthor = authors.indexOf(blog.author)
+      blogsCount[curAuthor] += 1
+      
+      if (blogsCount[curAuthor] > mostBlogsCount) {
+        mostBlogsCount = blogsCount[curAuthor]
+        mostBlogsIndex = curAuthor
+      }
+    }
+    else {
+      authors = authors.concat(blog.author)
+      blogsCount = blogsCount.concat(1)
+    }
+  })
+
+  return { author: authors[mostBlogsIndex], blogs: mostBlogsCount }
+}
+
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs
 }
