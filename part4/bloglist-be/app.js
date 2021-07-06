@@ -12,18 +12,15 @@ const mongoose = require('mongoose')
 
 const app = express()
 
-// const connectMongo = () => {
-  logger.info('connecting to', config.MONGODB_URI)
-
-  const mongoUrl = config.MONGODB_URI
-  mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
-    .then(() => {
-      logger.info('connected to MongoDB')
-    })
-    .catch((error) => {
-      logger.error('error connecting to MongoDB:', error.message)
-    })
-// }
+logger.info('connecting to', config.MONGODB_URI)
+const mongoUrl = config.MONGODB_URI
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
+  .then(() => {
+    logger.info('connected to MongoDB')
+  })
+  .catch((error) => {
+    logger.error('error connecting to MongoDB:', error.message)
+  })
 
 app.use(cors())
 app.use(express.static('build'))

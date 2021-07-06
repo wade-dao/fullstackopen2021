@@ -11,3 +11,15 @@ Content-Type: application/json
   "url": "https://www.nirandfar.com/hooked/",
   "likes": 1269
 }
+
+###update a blog
+PUT http://localhost:3003/api/blogs/60def2969dbb51199250cb7a
+Content-Type: application/json
+
+{
+  "likes": 1280
+}
+
+###delete a blog using id
+DELETE http://localhost:3003/api/blogs/60def8ee28cd052028e2ec87
+
