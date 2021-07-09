@@ -12,12 +12,12 @@ const setToken = (token) => {
   }
 }
 
-const getAll = () => {
-  const request = axios.get(baseUrl, headers)
-  return request.then(response => response.data)
+const getAll = async () => {
+  const response = await axios.get(baseUrl, headers)
+  return response.data
 }
 
-const createNew = (newBlog) => {
+const createNew = async (newBlog) => {
   console.log(headers)
   const options = {
     method: 'POST',
@@ -25,8 +25,8 @@ const createNew = (newBlog) => {
     data: newBlog,
     url: baseUrl
   }
-  const request = axios(options)
-  return request.then(response => response.data)
+  const response = await axios(options)
+  return response.data
 }
 
 

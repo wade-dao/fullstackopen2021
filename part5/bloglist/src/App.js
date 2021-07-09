@@ -18,10 +18,9 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+  useEffect(async () => {
+    const blogList = await blogService.getAll()
+    setBlogs(blogList)
   }, [])
 
   useEffect(() => {

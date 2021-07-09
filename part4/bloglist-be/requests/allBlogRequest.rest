@@ -5,13 +5,12 @@ GET http://localhost:3003/api/blogs
 ###add new blog with token
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1dSIsImlkIjoiNjBlNDQzMjliZDg5ZTcwZjk0MWFjMTU4IiwiaWF0IjoxNjI1NjQ1MDE2fQ.5KA8Y_KnmJT8MFoRg8DTUxDcmV1GrvTS_yNScg4Tu2c
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imx1dSIsImlkIjoiNjBlNDQzMjliZDg5ZTcwZjk0MWFjMTU4IiwiaWF0IjoxNjI1ODE3Mjk0fQ.oEth_mMqYv5afZEoRWQytT_xowPU8chpuMSZD4fB_rQ
 
 {
-  "title": "Type wars",
-  "author": "Robert C. Martin",
-  "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-  "likes": 22
+  "title": "The first post",
+  "author": "Luu",
+  "url": "123",
 }
 
 ###add new blog without token
