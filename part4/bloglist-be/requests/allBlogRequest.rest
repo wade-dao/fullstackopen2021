@@ -25,7 +25,7 @@ Content-Type: application/json
 }
 
 ###update a blog
-PUT http://localhost:3003/api/blogs/60def2969dbb51199250cb7a
+PUT http://localhost:3003/api/blogs/60e9517f48f9c4045fbf41bc
 Content-Type: application/json
 
 {

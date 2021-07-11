@@ -4,8 +4,6 @@ const baseUrl = 'http://localhost:3003/api/blogs'
 let headers = null
 
 const setToken = (token) => {
-  const auth = 'bearer ' + token
-  console.log(auth)
   headers = {
     'Content-Type': 'application/json',
     'Authorization': 'bearer ' + token
@@ -18,7 +16,6 @@ const getAll = async () => {
 }
 
 const createNew = async (newBlog) => {
-  console.log(headers)
   const options = {
     method: 'POST',
     headers: headers,
@@ -29,11 +26,33 @@ const createNew = async (newBlog) => {
   return response.data
 }
 
+const updateInformation = async(updatedBlog) => {
+  const options = {
+    method: 'PUT',
+    data: updatedBlog,
+    url: baseUrl + '/' + updatedBlog.id
+  }
 
+  const response = await axios(options)
+  return response.data
+}
+
+const deleteBlog = async (toBeDeleted) => {
+  const options = {
+    method: 'DELETE',
+    headers: headers,
+    url: baseUrl + '/' + toBeDeleted
+  }
+
+  const response = await axios(options)
+  return response.data
+}
 
 const exportedObject = {
   getAll,
   setToken,
-  createNew
+  createNew,
+  updateInformation,
+  deleteBlog
 }
 export default exportedObject
