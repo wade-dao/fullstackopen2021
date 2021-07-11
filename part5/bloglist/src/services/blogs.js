@@ -45,6 +45,7 @@ const deleteBlog = async (toBeDeleted) => {
   }
 
   const response = await axios(options)
+  console.log(response.data)
   return response.data
 }
 
