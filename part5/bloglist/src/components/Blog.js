@@ -36,14 +36,16 @@ const Blog = ({ blog, likeBlog, loggedInUser, deleteBlog }) => {
   }
 
   return (
-    <div style={blogStyle}>
-      {blog.title} {blog.author} <button onClick={toggleDetail}> {visiblity === false ? 'view' : 'hide'} </button>
+    <div className="singleBlog" style={blogStyle}>
+      <div className="titleAuthor">
+        {blog.title} {blog.author} <button className="viewButton" onClick={toggleDetail}> {visiblity === false ? 'view' : 'hide'} </button>
+      </div>
       {visiblity === true &&
-        <div>
+        <div className="urlLikesUser">
           <div>{blog.url}</div>
-          <div>likes {blog.likes} <button onClick={handleClickLike}>like</button></div>
+          <div>likes {blog.likes} <button className="likeButton" onClick={handleClickLike}>like</button></div>
           <div>{blog.user.name}</div>
-          {loggedInUser.username === blog.user.username ? <button onClick={handleClickRemove}>remove</button> : null}
+          {loggedInUser.username === blog.user.username ? <button className="removeButton" onClick={handleClickRemove}>remove</button> : null}
         </div>
       }
     </div>
