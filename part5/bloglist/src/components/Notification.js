@@ -22,7 +22,7 @@ const Notification = ({ message }) => {
   }
 
   return (
-    <div style={message.type ? success : error}>
+    <div className="notification" style={message.type ? success : error}>
       {message.content}
     </div>
   )

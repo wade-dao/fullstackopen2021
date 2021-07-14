@@ -43,7 +43,16 @@ const Blog = ({ blog, likeBlog, loggedInUser, deleteBlog }) => {
       {visiblity === true &&
         <div className="urlLikesUser">
           <div>{blog.url}</div>
-          <div>likes {blog.likes} <button className="likeButton" onClick={handleClickLike}>like</button></div>
+          {/* <div>likes {blog.likes} <button className="likeButton" onClick={handleClickLike}>like</button></div> */}
+          <table>
+            <tbody>
+              <tr>
+                <td>likes</td>
+                <td className="likeNumber">{blog.likes}</td>
+                <td><button className="likeButton" onClick={handleClickLike}>like</button></td>
+              </tr>
+            </tbody>
+          </table>
           <div>{blog.user.name}</div>
           {loggedInUser.username === blog.user.username ? <button className="removeButton" onClick={handleClickRemove}>remove</button> : null}
         </div>

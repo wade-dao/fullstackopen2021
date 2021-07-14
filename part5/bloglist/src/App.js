@@ -23,9 +23,9 @@ const App = () => {
       const blogList = await blogService.getAll()
       blogList.sort((a, b) => {
         if (a.likes > b.likes)
-          return 1
-        if (a.likes < b.likes)
           return -1
+        if (a.likes < b.likes)
+          return 1
         return 0
       })
       setBlogs(blogList)
@@ -110,6 +110,13 @@ const App = () => {
       const updatedBlogIndex = localUpdatedBlogIds.indexOf(afterUpdatedBlog.id)
       const updatedBlogs = [...blogs]
       updatedBlogs[updatedBlogIndex].likes = updatedBlog.likes
+      updatedBlogs.sort((a, b) => {
+        if (a.likes > b.likes)
+          return -1
+        if (a.likes < b.likes)
+          return 1
+        return 0
+      })
       setBlogs(updatedBlogs)
     } catch (exception) {
       setErrorMessage({ type: 0, content: 'Unauthorized user' })
@@ -137,12 +144,13 @@ const App = () => {
       <div>
         <h2>blogs</h2>
         {errorMessage !== null && <Notification message={errorMessage} /> }
-        <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
+        <p>{user.name} logged in <button className="logoutButton" onClick={handleLogout}>logout</button></p>
         <Togglable buttonLabel="create new blog" ref={blogFormRef}>
           <BlogForm createNewBlog={createNewBlog} />
         </Togglable>
-
-        {blogs.map(blog => <Blog key={blog.id} blog={blog} likeBlog={increaseLike} loggedInUser={user} deleteBlog={deleteBlog}/>)}
+        <div className="blogList">
+          {blogs.map(blog => <Blog key={blog.id} blog={blog} likeBlog={increaseLike} loggedInUser={user} deleteBlog={deleteBlog}/>)}
+        </div>
       </div>
     )
   }
@@ -153,25 +161,25 @@ const App = () => {
         <h2>login to application</h2>
         {errorMessage !== null && <Notification message={errorMessage} />}
         <form onSubmit={handleLogin}>
-          <div>
+          <div className="username">
             username
-            <input
+            <input className="usernameInput"
               type="text"
               value={username}
               name="Username"
               onChange={({ target }) => setUsername(target.value)}
             />
           </div>
-          <div>
+          <div className="password">
             password
-            <input
+            <input className="passwordInput"
               type="password"
               value={password}
               name="Password"
               onChange={({ target }) => setPassword(target.value)}
             />
           </div>
-          <button type="submit">login</button>
+          <button className="loginButton" type="submit">login</button>
         </form>
       </div>
     )
