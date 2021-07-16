@@ -2,7 +2,7 @@
   "anecdotes": [
     {
       "content": "If it hurts, do it more often",
-      "votes": 8,
+      "votes": 9,
       "id": "47145"
     },
     {
@@ -37,12 +37,12 @@
     },
     {
       "content": "Ahihi do ngok",
-      "votes": 1,
+      "votes": 2,
       "id": "rPCh-c-"
     },
     {
       "content": "Hey?",
-      "votes": 11,
+      "votes": 14,
       "id": "Tb_Xsc1"
     },
     {
@@ -52,7 +52,7 @@
     },
     {
       "content": "Yee",
-      "votes": 7,
+      "votes": 9,
       "id": "gbQh4ZW"
     },
     {
@@ -64,6 +64,21 @@
       "content": "Shix",
       "votes": 4,
       "id": "YaOkml1"
+    },
+    {
+      "content": "Yo",
+      "votes": 0,
+      "id": "vnl1TBO"
+    },
+    {
+      "content": "Shiet",
+      "votes": 0,
+      "id": "m0rhezW"
+    },
+    {
+      "content": "Connect Form",
+      "votes": 10,
+      "id": "d4z-AR3"
     }
   ]
 }
