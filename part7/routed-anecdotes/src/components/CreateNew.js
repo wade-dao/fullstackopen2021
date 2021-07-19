@@ -21,10 +21,10 @@ const CreateNew = (props) => {
     })
   }
 
-  const handleReset = (e) => {
-    clearValueContent(e)
-    clearValueAuthor(e)
-    clearValueInfo(e)
+  const handleReset = () => {
+    clearValueContent()
+    clearValueAuthor()
+    clearValueInfo()
   }
 
   return (
