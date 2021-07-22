@@ -49,7 +49,8 @@ const Blog = ({ blog }) => {
     }
   }
 
-  const handleAddComment = async () => {
+  const handleAddComment = async (event) => {
+    event.preventDefault()
     if (comment.value !== '')
     {
       dispatch(addBlogComment(blog, comment.value))
@@ -75,8 +76,10 @@ const Blog = ({ blog }) => {
           <div>{blog.user.name}</div>
           {loggedInUser.username === blog.user.username ? <button className="removeButton" onClick={handleClickRemove}>remove</button> : null}
           <h3>comments</h3>
-          <input name="comment" {...commentInput} />
-          <button onClick={handleAddComment} id="addCommentButton" type="submit">add comment</button>
+          <form onSubmit={handleAddComment}>
+            <input name="comment" {...commentInput} />
+            <button id="addCommentButton" type="submit">add comment</button>
+          </form>
           <ul>
             {blog.comments.map((comment, index) => <li key={index}>{comment}</li>)}
           </ul>
