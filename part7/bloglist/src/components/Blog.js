@@ -1,27 +1,32 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { likeBlog, deleteBlog } from '../reducers/blogReducer'
-import { setNotification } from '../reducers/notificationReducer'
+import { React, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useRouteMatch } from 'react-router'
+import { useField } from '../hooks'
+
+import { likeBlog, deleteBlog, initializeBlogs, addBlogComment } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
 const Blog = ({ blog }) => {
-  const [visiblity, setVisibility] = useState(false)
-
   const dispatch = useDispatch()
   const loggedInUser = useSelector(state => state.loggedInUser)
+  const blogs = useSelector(state => state.blogs)
+  const matchBlog = useRouteMatch('/blogs/:id')
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 5,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
+  const comment = useField('text')
+  const { clearValue: clearValueComment, ...commentInput } = comment
 
-  const toggleDetail = () => {
-    setVisibility(!visiblity)
-  }
+  useEffect(() => {
+    if (blog === null || typeof blog === 'undefined') {
+      dispatch(initializeBlogs())
+    }
+  }, [])
+
+  useEffect(() => {
+    blog = matchBlog
+      ? blogs.find(blog => blog.id === matchBlog.params.id)
+      : null
+  }, [blogs, matchBlog])
+
 
   const handleClickLike = async () => {
     dispatch(likeBlog(blog))
@@ -44,33 +49,46 @@ const Blog = ({ blog }) => {
     }
   }
 
-  return (
-    <div className="singleBlog" style={blogStyle}>
-      <div className="titleAuthor">
-        {blog.title} {blog.author} <button className="viewButton" onClick={toggleDetail}> {visiblity === false ? 'view' : 'hide'} </button>
-      </div>
-      {visiblity === true &&
+  const handleAddComment = async () => {
+    if (comment.value !== '')
+    {
+      dispatch(addBlogComment(blog, comment.value))
+      clearValueComment()
+    }
+  }
+
+  if (blog !== null && typeof blog !== 'undefined') {
+    return (
+      <div>
+        <h2>{blog.title} {blog.author}</h2>
         <div className="urlLikesUser">
-          <div>{blog.url}</div>
+          <a href="#">{blog.url}</a>
           <table>
             <tbody>
               <tr>
-                <td>likes</td>
                 <td className="likeNumber">{blog.likes}</td>
+                <td>likes</td>
                 <td><button className="likeButton" onClick={handleClickLike}>like</button></td>
               </tr>
             </tbody>
           </table>
           <div>{blog.user.name}</div>
           {loggedInUser.username === blog.user.username ? <button className="removeButton" onClick={handleClickRemove}>remove</button> : null}
+          <h3>comments</h3>
+          <input name="comment" {...commentInput} />
+          <button onClick={handleAddComment} id="addCommentButton" type="submit">add comment</button>
+          <ul>
+            {blog.comments.map((comment, index) => <li key={index}>{comment}</li>)}
+          </ul>
         </div>
-      }
-    </div>
-  )
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <h2>waiting for data</h2>
+      </div>
+    )
+  }
 }
-
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired
-}
-
 export default Blog

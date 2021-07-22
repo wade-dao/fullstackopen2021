@@ -1,31 +1,41 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { createBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { useDispatch } from 'react-redux'
+import { useField } from '../hooks'
 
 const BlogForm = () => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+
+  const title = useField('text')
+  const author = useField('text')
+  const url = useField('text')
+
+  const { clearValue: clearValueTitle, ...titleInput } = title
+  const { clearValue: clearValueAuthor, ...authorInput } = author
+  const { clearValue: clearValueUrl, ...urlInput } = url
 
   const dispatch = useDispatch()
 
   const handleSubmit = async (event) => {
     event.preventDefault()
     dispatch(createBlog({
-      title: title,
-      author: author,
-      url: url
+      title: title.value,
+      author: author.value,
+      url: url.value
     }))
     dispatch(setNotification({
       type: 1,
-      content: 'a new blog ' + title + ' by ' + author + ' added',
+      content: 'a new blog ' + title.value + ' by ' + author.value + ' added',
       displayTime: 5
     }))
 
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+    clearValueTitle()
+    clearValueAuthor()
+    clearValueUrl()
+  }
+
+  const buttonStyle = {
+    marginBottom: 5
   }
 
   return (
@@ -37,39 +47,24 @@ const BlogForm = () => {
             <tr>
               <td>title:</td>
               <td>
-                <input id="title"
-                  type="text"
-                  value={title}
-                  name="Title"
-                  onChange={({ target }) => setTitle(target.value)}
-                />
+                <input name="title" {...titleInput} />
               </td>
             </tr>
             <tr>
               <td>author:</td>
               <td>
-                <input id="author"
-                  type="text"
-                  value={author}
-                  name="Password"
-                  onChange={({ target }) => setAuthor(target.value)}
-                />
+                <input name="author" {...authorInput}/>
               </td>
             </tr>
             <tr>
               <td>url:</td>
               <td>
-                <input id="url"
-                  type="text"
-                  value={url}
-                  name="URL"
-                  onChange={({ target }) => setUrl(target.value)}
-                />
+                <input name="url" {...urlInput}/>
               </td>
             </tr>
           </tbody>
         </table>
-        <button id="createNewButton" type="submit">create</button>
+        <button style={buttonStyle} id="createNewButton" type="submit">create</button>
       </form>
     </div>
   )

@@ -1,60 +1,39 @@
-import React, { useState, useEffect, useRef } from 'react'
-// import { useDispatch } from 'react-redux'
-// import { initializeBlogs } from './reducers/blogReducer'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { userLogin, userInit } from './reducers/loginReducer'
 
-// import Blog from './components/Blog'
-import Notification from './components/Notification'
-import Togglable from './components/Togglable'
-import BlogForm from './components/BlogForm'
+import { Switch, Route, useRouteMatch } from 'react-router-dom'
 
 import blogService from './services/blogs'
-// import loginService from './services/login'
-import BlogList from './components/BlogList'
-import { useDispatch, useSelector } from 'react-redux'
-import { userLogin, userInit, userLogout } from './reducers/userReducer'
+
+import Notification from './components/Notification'
+import Blog from './components/Blog'
+import Users from './components/Users'
+import Menu from './components/Menu'
+import User from './components/User'
+import Home from './components/Home'
 
 const App = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const blogFormRef = useRef()
   const dispatch = useDispatch()
   const loggedInUser = useSelector(state => state.loggedInUser)
+  const users = useSelector(state => state.users)
+  const blogs = useSelector(state => state.blogs)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
     if (loggedUserJSON) {
-      dispatch(userInit(loggedUserJSON))
-      blogService.setToken(loggedUserJSON.token)
+      dispatch(userInit(JSON.parse(loggedUserJSON)))
+      blogService.setToken(JSON.parse(loggedUserJSON).token)
     }
   }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault()
     dispatch(userLogin({ username, password }))
-  }
-
-  const handleLogout = (event) => {
-    event.preventDefault()
-    window.localStorage.removeItem('loggedBloglistUser')
-    dispatch(userLogout())
-    setUsername('')
-    setPassword('')
-  }
-
-  const blogList = () => {
-    return (
-      <div>
-        <h2>blogs</h2>
-        <Notification />
-        <p>{loggedInUser.name} logged in <button className="logoutButton" onClick={handleLogout}>logout</button></p>
-        <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-          <BlogForm />
-        </Togglable>
-        <BlogList />
-      </div>
-    )
   }
 
   const loginForm = () => {
@@ -87,9 +66,39 @@ const App = () => {
     )
   }
 
+  const matchUser = useRouteMatch('/users/:id')
+  const user = matchUser
+    ? users.find(user => user.id === matchUser.params.id)
+    : null
+
+  const matchBlog = useRouteMatch('/blogs/:id')
+  const blog = matchBlog
+    ? blogs.find(blog => blog.id === matchBlog.params.id)
+    : null
+
   return (
     <div>
-      { loggedInUser === null ? loginForm() : blogList() }
+      { loggedInUser === null
+        ? loginForm()
+        :
+        <div>
+          <Menu />
+          <Switch>
+            <Route path="/blogs/:id">
+              <Blog blog={blog} />
+            </Route>
+            <Route path="/users/:id">
+              <User data={user} />
+            </Route>
+            <Route path="/users">
+              <Users />
+            </Route>
+            <Route path="/">
+              <Home />
+            </Route>
+          </Switch>
+        </div>
+      }
     </div>
   )
 }

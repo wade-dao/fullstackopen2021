@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3003/api/blogs'
+const baseUrl = 'http://localhost:3003/api/users'
 
 let headers = null
 
@@ -15,40 +15,29 @@ const getAll = async () => {
   return response.data
 }
 
-const createNew = async (newBlog) => {
+const createNew = async (newUser) => {
   const options = {
     method: 'POST',
     headers: headers,
-    data: newBlog,
+    data: newUser,
     url: baseUrl
   }
   const response = await axios(options)
   return response.data
 }
 
-const updateInformation = async(updatedBlog) => {
+const updateInformation = async(updatedUser) => {
   const options = {
     method: 'PUT',
-    data: updatedBlog,
-    url: baseUrl + '/' + updatedBlog.id
+    data: updatedUser,
+    url: baseUrl + '/' + updatedUser.id
   }
 
   const response = await axios(options)
   return response.data
 }
 
-const addComment = async(updatedBlog) => {
-  const options = {
-    method: 'POST',
-    data: updatedBlog,
-    url: baseUrl + '/' + updatedBlog.id + '/comments'
-  }
-
-  const response = await axios(options)
-  return response.data
-}
-
-const deleteBlog = async (toBeDeleted) => {
+const deleteUser = async (toBeDeleted) => {
   const options = {
     method: 'DELETE',
     headers: headers,
@@ -56,7 +45,6 @@ const deleteBlog = async (toBeDeleted) => {
   }
 
   const response = await axios(options)
-  // console.log(response.data)
   return response.data
 }
 
@@ -65,7 +53,6 @@ const exportedObject = {
   setToken,
   createNew,
   updateInformation,
-  addComment,
-  deleteBlog
+  deleteUser
 }
 export default exportedObject
