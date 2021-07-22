@@ -3,6 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useRouteMatch } from 'react-router'
 import { useField } from '../hooks'
 
+import Button from 'react-bootstrap/Button'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Form from 'react-bootstrap/Form'
+
 import { likeBlog, deleteBlog, initializeBlogs, addBlogComment } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
@@ -69,20 +73,24 @@ const Blog = ({ blog }) => {
               <tr>
                 <td className="likeNumber">{blog.likes}</td>
                 <td>likes</td>
-                <td><button className="likeButton" onClick={handleClickLike}>like</button></td>
+                <td><Button id="likeButton" variant="outline-primary" onClick={handleClickLike}>Like</Button></td>
               </tr>
             </tbody>
           </table>
           <div>{blog.user.name}</div>
           {loggedInUser.username === blog.user.username ? <button className="removeButton" onClick={handleClickRemove}>remove</button> : null}
           <h3>comments</h3>
-          <form onSubmit={handleAddComment}>
-            <input name="comment" {...commentInput} />
-            <button id="addCommentButton" type="submit">add comment</button>
-          </form>
-          <ul>
-            {blog.comments.map((comment, index) => <li key={index}>{comment}</li>)}
-          </ul>
+          <Form onSubmit={handleAddComment}>
+            <Form.Group className="mb-3" controlId="formComment">
+              <Form.Control name="comment" type="text" placeholder="Type your comment here..." {...commentInput} />
+            </Form.Group>
+            <Button id="addCommentButton" variant="primary" type="submit">Add comment</Button>
+          </Form>
+          <ListGroup as="ul">
+            {blog.comments.map((comment, index) =>
+              <ListGroup.Item as="li" key={index}>{comment}</ListGroup.Item>
+            )}
+          </ListGroup>
         </div>
       </div>
     )

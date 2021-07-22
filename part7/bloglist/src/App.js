@@ -38,7 +38,7 @@ const App = () => {
     : null
 
   return (
-    <div>
+    <div className="container">
       { loggedInUser === null
         ? <Login />
         :

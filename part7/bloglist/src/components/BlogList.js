@@ -4,6 +4,8 @@ import { initializeBlogs } from '../reducers/blogReducer'
 
 import { Link } from 'react-router-dom'
 
+import Table from 'react-bootstrap/Table'
+
 const BlogList = () => {
   const blogs = useSelector(state => state.blogs)
   const dispatch = useDispatch()
@@ -12,22 +14,28 @@ const BlogList = () => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 5,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
+  // const blogStyle = {
+  //   paddingTop: 10,
+  //   paddingBottom: 10,
+  //   paddingLeft: 5,
+  //   border: 'solid',
+  //   borderWidth: 1,
+  //   marginBottom: 5
+  // }
 
   return (
     <div className="blogList">
-      {blogs.map(blog =>
-        <div key={blog.id} className="singleBlog" style={blogStyle}>
-          <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
-        </div>
-      )}
+      <Table striped>
+        <tbody>
+          {blogs.map(blog =>
+            <tr key={blog.id} className="singleBlog">
+              <td>
+                <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </div>
   )
 }

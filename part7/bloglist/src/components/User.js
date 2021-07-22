@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useRouteMatch } from 'react-router'
 import { initializeUsers } from '../reducers/userReducer'
 
+import ListGroup from 'react-bootstrap/ListGroup'
+
 const User = ({ data }) => {
   const dispatch = useDispatch()
   const users = useSelector(state => state.users)
@@ -23,15 +25,17 @@ const User = ({ data }) => {
     return (
       <div>
         <h2>{data.name}</h2>
-        <h3>addded blogs</h3>
-        <ul>
+        <h3>Added blogs</h3>
+        <ListGroup as="ul">
           {data.blogs.length > 0
             ? data.blogs.map(blog =>
-              <li key={blog.id}>{blog.title}</li>
+              <ListGroup.Item as="li" key={blog.id}>
+                {blog.title}
+              </ListGroup.Item>
             )
             : null
           }
-        </ul>
+        </ListGroup>
       </div>
     )
   }

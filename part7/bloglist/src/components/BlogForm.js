@@ -4,6 +4,9 @@ import { setNotification } from '../reducers/notificationReducer'
 import { useDispatch } from 'react-redux'
 import { useField } from '../hooks'
 
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+
 const BlogForm = () => {
 
   const title = useField('text')
@@ -40,32 +43,24 @@ const BlogForm = () => {
 
   return (
     <div>
-      <h2>create new</h2>
-      <form onSubmit={handleSubmit}>
-        <table>
-          <tbody>
-            <tr>
-              <td>title:</td>
-              <td>
-                <input name="title" {...titleInput} />
-              </td>
-            </tr>
-            <tr>
-              <td>author:</td>
-              <td>
-                <input name="author" {...authorInput}/>
-              </td>
-            </tr>
-            <tr>
-              <td>url:</td>
-              <td>
-                <input name="url" {...urlInput}/>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <button style={buttonStyle} id="createNewButton" type="submit">create</button>
-      </form>
+      <h3>Create new blog</h3>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group className="mb-3" controlId="formTitle">
+          <Form.Label>Title</Form.Label>
+          <Form.Control name="title" placeholder="Blog title" {...titleInput} />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formAuthor">
+          <Form.Label>Author</Form.Label>
+          <Form.Control name="author" placeholder="Author of the blog" {...authorInput} />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formUrl">
+          <Form.Label>URL</Form.Label>
+          <Form.Control name="url" placeholder="URL of the blog" {...urlInput} />
+        </Form.Group>
+        <Button style={buttonStyle} id="createNewButton" variant="primary" type="submit">
+          Create
+        </Button>
+      </Form>
     </div>
   )
 }

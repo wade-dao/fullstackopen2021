@@ -1,6 +1,8 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 import { useField } from '../hooks'
 import { userLogin } from '../reducers/loginReducer'
@@ -31,17 +33,20 @@ const Login = () => {
     <div>
       <h2>login to application</h2>
       <Notification />
-      <form onSubmit={handleLogin}>
-        <div className="username">
-          username
-          <input className="usernameInput" name="username" {...usernameInput} />
-        </div>
-        <div className="password">
-          password
-          <input className="passwordInput" name="password" {...passwordInput} />
-        </div>
-        <button className="loginButton" type="submit">login</button>
-      </form>
+      <Form onSubmit={handleLogin}>
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Username</Form.Label>
+          <Form.Control type="text" placeholder="Enter username" {...usernameInput}/>
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control type="password" placeholder="Password" {...passwordInput}/>
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          Login
+        </Button>
+      </Form>
     </div>
   )
 }

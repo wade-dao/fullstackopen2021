@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 
 import { initializeUsers } from '../reducers/userReducer'
 
+import Table from 'react-bootstrap/Table'
+
 const Users = () => {
   const dispatch = useDispatch()
   const users = useSelector(state => state.users)
@@ -16,7 +18,7 @@ const Users = () => {
     <div>
       <h2>Users</h2>
       <div className="userList">
-        <table>
+        <Table striped>
           <tbody>
             <tr>
               <th></th>
@@ -29,7 +31,7 @@ const Users = () => {
               </tr>
             )}
           </tbody>
-        </table>
+        </Table>
       </div>
     </div>
   )
