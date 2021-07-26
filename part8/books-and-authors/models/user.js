@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
 
-const schema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
@@ -11,32 +12,15 @@ const schema = new mongoose.Schema({
     type: Number,
   },
 })
+userSchema.plugin(uniqueValidator)
+module.exports = mongoose.model('User', userSchema)
 
-module.exports = mongoose.model('User', schema)
-
-type User {
-  username: String!
-  favoriteGenre: String!
-  id: ID!
-}
-
-type Token {
-  value: String!
-}
-
-type Query {
-  // ..
-  me: User
-}
-
-type Mutation {
-  // ...
-  createUser(
-    username: String!
-    favoriteGenre: String!
-  ): User
-  login(
-    username: String!
-    password: String!
-  ): Token
-}
+const tokenSchema = new mongoose.Schema({
+  value: {
+    type: String,
+    required: true,
+    unique: true
+  }
+})
+tokenSchema.plugin(uniqueValidator)
+module.exports = mongoose.model('Token', tokenSchema)
