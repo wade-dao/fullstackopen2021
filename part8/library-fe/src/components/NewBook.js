@@ -24,12 +24,17 @@ const NewBook = (props) => {
     // console.log('add book...', title, author, published.parseInt(), genres)
     const intPublished = parseInt(published, 10)
     // createBook({ variables: { title, author, intPublished, genres } })
-    createBook({ variables: {
-      title: title,
-      author: author,
-      published: intPublished,
-      genres: genres 
-    }})
+    try {
+      await createBook({ variables: {
+        title: title,
+        author: author,
+        published: intPublished,
+        genres: genres 
+      }})
+    }
+    catch (exception) {
+      alert(exception)
+    }
 
     setTitle('')
     setPublished('')
