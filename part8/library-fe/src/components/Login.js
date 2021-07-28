@@ -10,8 +10,13 @@ const Login = ({ show, handleLogin }) => {
 
   const submit = async (event) => {
     event.preventDefault()
-    
-    await handleLogin(username, password)
+
+    try {
+      await handleLogin(username, password)
+    }
+    catch (exception) {
+      alert(exception)
+    }
     setUsername('')
     setPassword('')
   }

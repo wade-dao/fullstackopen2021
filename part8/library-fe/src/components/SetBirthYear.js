@@ -17,10 +17,16 @@ const SetBirthYear = () => {
   const submit = async (event) => {
     event.preventDefault()
     const intBorn = parseInt(born, 10)
-    updateBirthYear({ variables: {
-      name: name,
-      setBornTo: intBorn
-    }})
+
+    try {
+      await updateBirthYear({ variables: {
+        name: name,
+        setBornTo: intBorn
+      }})
+    }
+    catch (exception) {
+      alert(exception)
+    }
 
     setName('')
     setBorn('')

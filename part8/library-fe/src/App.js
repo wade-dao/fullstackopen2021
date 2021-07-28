@@ -16,8 +16,9 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [token, setToken] = useState('')
 
-  const [getCurrentUser, userData]  = useLazyQuery(CURRENT_USER)
-  // const userData  = useQuery(CURRENT_USER)
+  const [getCurrentUser, userData]  = useLazyQuery(CURRENT_USER, {
+    fetchPolicy: "network-only"
+  })
 
   useEffect(() => {
     const existingUser = window.localStorage.getItem('library-user-info')
@@ -29,34 +30,14 @@ const App = () => {
       setToken(existingToken)
   },[])
 
-  // const [login] = useMutation(LOGIN, {
-  //   refetchQueries: [{ query: CURRENT_USER }],
-  //   onError: (error) => {
-  //     // setError(error.graphQLErrors[0].message)
-  //     console.log(error.graphQLErrors[0].message)
-  //   },
-  //   update: (store, response) => {
-  //     const dataInStore = store.readQuery({ query: CURRENT_USER })
-  //     console.log('result in refetch', response.data.me)
-  //     store.writeQuery({
-  //       query: CURRENT_USER,
-  //       data: {
-  //         ...dataInStore,
-  //         me: response.data.me
-  //       }
-  //     })
-  //   }
-  // })
-
   const [login] = useMutation(LOGIN)
 
   useEffect(() => {
-    if (token !== '' && userData.data) {
-      // getCurrentUser()
+    if (token !== '' && userData.data && userData.data.me) {
       window.localStorage.setItem('library-user-info', JSON.stringify(userData.data.me))
       setUser(userData.data.me)
     }
-  }, [userData.data])
+  }, [userData.data, token])
 
   const handleLogin = async (username, password) => {
     try {

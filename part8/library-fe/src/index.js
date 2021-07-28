@@ -8,9 +8,8 @@ import { setContext } from '@apollo/client/link/context'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-const authLink = setContext((request, { headers }) => {
+const authLink = setContext((_, { headers }) => {
   const token = window.localStorage.getItem('library-user-token')
-  console.log('the token for ', request.query.loc.source.body, ' is ', token)
   return {
     headers: {
       ...headers,
