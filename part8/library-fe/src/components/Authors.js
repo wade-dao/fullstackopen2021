@@ -1,7 +1,7 @@
 import React from 'react'
 import { useQuery } from '@apollo/client'
 
-import { ALL_AUTHORS } from '../queries'
+import { ALL_AUTHORS } from '../graphql/queries'
 import SetBirthYear from './SetBirthYear'
 
 const Authors = (props) => {

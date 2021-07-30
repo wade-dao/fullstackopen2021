@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useMutation, useQuery } from '@apollo/client'
-import { UPDATE_BIRTHYEAR } from '../mutations'
-import { ALL_AUTHORS } from '../queries'
+import { UPDATE_BIRTHYEAR } from '../graphql/mutations'
+import { ALL_AUTHORS } from '../graphql/queries'
 
 import { Form } from 'react-bootstrap'
 
@@ -25,7 +25,7 @@ const SetBirthYear = () => {
       }})
     }
     catch (exception) {
-      alert(exception)
+      console.log(exception)
     }
 
     setName('')

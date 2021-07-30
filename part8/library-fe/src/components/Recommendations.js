@@ -1,6 +1,6 @@
 import React from 'react'
 import { useQuery } from '@apollo/client'
-import { ALL_BOOKS_FROM_A_GENRE } from '../queries'
+import { ALL_BOOKS_FROM_A_GENRE } from '../graphql/queries'
 
 const Recommendations = (props) => {
   const result = useQuery(ALL_BOOKS_FROM_A_GENRE, {

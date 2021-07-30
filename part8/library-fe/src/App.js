@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import React, { useEffect, useState } from 'react'
-import { useLazyQuery } from '@apollo/client'
+import { useLazyQuery, useSubscription, useApolloClient } from '@apollo/client'
 
 import Authors from './components/Authors'
 import Books from './components/Books'
@@ -8,13 +8,15 @@ import Login from './components/Login'
 import NewBook from './components/NewBook'
 import Recommendations from './components/Recommendations'
 
-import { LOGIN } from './mutations'
-import { CURRENT_USER } from './queries'
+import { LOGIN } from './graphql/mutations'
+import { ALL_BOOKS, CURRENT_USER } from './graphql/queries'
+import { BOOK_ADDED } from './graphql/subscriptions'
 
 const App = () => {
   const [page, setPage] = useState('authors')
   const [user, setUser] = useState(null)
   const [token, setToken] = useState('')
+  const client = useApolloClient()
 
   const [getCurrentUser, userData]  = useLazyQuery(CURRENT_USER, {
     fetchPolicy: "network-only"
@@ -62,6 +64,27 @@ const App = () => {
     window.localStorage.removeItem('library-user-info')
     setPage('login')
     setUser(null)
+  }
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const addedBook = subscriptionData.data.bookAdded
+      alert(addedBook.title, ' added!')
+      updateCacheWith(addedBook)
+    }
+  })
+
+  const updateCacheWith = (addedBook) => {
+    const includedIn = (set, object) =>
+      set.map(p => p.title).includes(object.title)
+
+    const dataInStore = client.readQuery({ query: ALL_BOOKS })
+    if (!includedIn(dataInStore.allBooks, addedBook)) {
+      client.writeQuery({
+        query: ALL_BOOKS,
+        data: { allBooks : dataInStore.allBooks.concat(addedBook) }
+      })
+    }   
   }
 
   return (
