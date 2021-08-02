@@ -26,10 +26,13 @@ const parseArgumentsEx = (args: Array<string>): ExerciseData => {
   return {
     target: Number(args[2]),
     exerciseData: numberData
-  }
-}
+  };
+};
 
 const calculateExercises = (exerciseData: Array<number>, targetAmount: number): ExerciseOverview => {
+  const args = (new Array(targetAmount)).concat(exerciseData);
+  parseArgumentsEx(args);
+
   const trainingDays = exerciseData.filter(x => x > 0).length;
   const average = exerciseData.reduce((e, s) => s = s + e) / exerciseData.length;
   const success = average > targetAmount ? true : false;
@@ -62,8 +65,10 @@ const calculateExercises = (exerciseData: Array<number>, targetAmount: number): 
     success: success,
     rating: rating,
     ratingDescription: ratingDescription
-  }
-}
+  };
+};
 
-const { exerciseData, target } = parseArgumentsEx(process.argv)
-console.log(calculateExercises(exerciseData, target))
+// const { exerciseData, target } = parseArgumentsEx(process.argv)
+// console.log(calculateExercises(exerciseData, target))
+
+export default calculateExercises;

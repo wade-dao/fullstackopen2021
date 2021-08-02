@@ -1,4 +1,4 @@
-interface BMIData {
+export interface BMIData {
   h: number;
   w: number;
 }
@@ -12,7 +12,7 @@ const parseArgumentsBmi = (args: Array<string>): BMIData => {
       return {
         h: Number(args[2]),
         w: Number(args[3])
-      }
+      };
     }
     else {
       throw new Error('Provided values could not be 0!');  
@@ -20,9 +20,16 @@ const parseArgumentsBmi = (args: Array<string>): BMIData => {
   } else {
     throw new Error('Provided values were not numbers!');
   }
-}
+};
 
-const calculateBmi = (data: BMIData): string => {
+export const calculateBmi = (data: BMIData): string => {
+  const args = ['0', '0', String(data.w), String(data.h)];
+  try {
+    parseArgumentsBmi(args);
+  }
+  catch (e) {
+    return 'malformatted parameters';
+  }
   const bmi = data.w / ((data.h / 100) ** 2);
   
   switch (true) {
@@ -37,11 +44,11 @@ const calculateBmi = (data: BMIData): string => {
     default:
       return 'Normal (healthy weight)';
   }
-}
+};
 
-try {
-  const input = parseArgumentsBmi(process.argv);
-  console.log(calculateBmi(input));
-} catch (e) {
-  console.log('Error, something bad happened, message: ', e.message);
-}
+// try {
+//   const input = parseArgumentsBmi(process.argv);
+//   console.log(calculateBmi(input));
+// } catch (e) {
+//   console.log('Error, something bad happened, message: ', e.message);
+// }
