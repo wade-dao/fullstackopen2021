@@ -1,4 +1,4 @@
-import { NewPatient, NonSsnPatient, Patient } from '../types';
+import { NewPatient, PublicPatient, Patient } from '../types';
 import patientEntries from '../../data/patientEntries';
 import {v1 as uuid} from 'uuid';
 
@@ -7,13 +7,17 @@ const getEntries = (): Array<Patient> => {
   return patientEntries;
 };
 
-const getNonSsnEntries = (): Array<NonSsnPatient> => {
+const getEntry = (id: String): Patient | undefined => {
+  return patientEntries.find(p => p.id === id);
+}
+
+const getPublicEntries = (): Array<PublicPatient> => {
   return patientEntries.map(({ id, name, dateOfBirth, gender, occupation }) => ({
     id, name, dateOfBirth, gender, occupation
   }));
 };
 
-const addEntry = (entry: NewPatient): NonSsnPatient => {
+const addEntry = (entry: NewPatient): PublicPatient => {
   const newEntry = {
     id: uuid(),
     ...entry
@@ -32,6 +36,7 @@ const addEntry = (entry: NewPatient): NonSsnPatient => {
 
 export default {
   getEntries,
-  getNonSsnEntries,
+  getEntry,
+  getPublicEntries,
   addEntry
 };

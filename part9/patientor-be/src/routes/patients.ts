@@ -4,17 +4,22 @@ import toNewPatientEntry from '../utils';
 
 const router = express.Router();
 
+router.get('/:id', (req, res) => {
+  const patient = patientService.getEntry(req.params.id);
+  if (patient) {
+    res.send(patient);
+  } else {
+    res.status(404).send();
+  }
+});
+
 router.get('/', (_req, res) => {
-  const nonSsnPatients = patientService.getNonSsnEntries();
+  const nonSsnPatients = patientService.getPublicEntries();
   res.send(nonSsnPatients);
 });
 
-// router.post('/', ({ body: { name, dateOfBirth, ssn, gender, occupation } }, res) => {
 router.post('/', (req, res) => {
   try {
-    // const newPatientEntry = toNewPatientEntry({
-    //   name, dateOfBirth, ssn, gender, occupation 
-    // });
     const newPatientEntry = toNewPatientEntry(req.body);
     const addedPatient = patientService.addEntry(newPatientEntry);
     res.json(addedPatient);
