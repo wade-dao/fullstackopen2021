@@ -8,7 +8,7 @@ import { setPatientInfo, useStateValue } from "../state";
 import { useParams } from "react-router-dom";
 
 const PatientInfoPage = () => {
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
   const patient = Object.values(patients).find(p => p.id === id);
 
@@ -43,7 +43,7 @@ const PatientInfoPage = () => {
               <div key={e.id}>
                 <p>{e.date} <em>{e.description}</em></p>
                 {e.diagnosisCodes === null ? null : <ul>
-                  {e.diagnosisCodes?.map(c => <li key={c}>{c}</li>)}
+                  {e.diagnosisCodes?.map(c => <li key={c}>{c} {Object.values(diagnoses).find(d => d.code === c)?.name}</li>)}
                 </ul> 
                 }
               </div>)
