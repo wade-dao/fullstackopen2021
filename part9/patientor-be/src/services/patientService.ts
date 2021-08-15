@@ -12,8 +12,8 @@ const getEntry = (id: String): Patient | undefined => {
 }
 
 const getPublicEntries = (): Array<PublicPatient> => {
-  return patientEntries.map(({ id, name, dateOfBirth, gender, occupation }) => ({
-    id, name, dateOfBirth, gender, occupation
+  return patientEntries.map(({ id, name, dateOfBirth, gender, occupation, entries }) => ({
+    id, name, dateOfBirth, gender, occupation, entries
   }));
 };
 
