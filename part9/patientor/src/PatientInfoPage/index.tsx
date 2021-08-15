@@ -36,7 +36,18 @@ const PatientInfoPage = () => {
           <h2>{patient.name} <Icon name={patient.gender === 'male' ? 'mars' : 'venus'} /></h2>
           <div>ssn: {patient.ssn}</div>
           <div>occupation: {patient.occupation}</div>
-          <div>date of birth: {patient.dateOfBirth}</div>
+          {/* <div>date of birth: {patient.dateOfBirth}</div> */}
+          <h3>entries</h3>
+          {
+            patient.entries.map(e => 
+              <div key={e.id}>
+                <p>{e.date} <em>{e.description}</em></p>
+                {e.diagnosisCodes === null ? null : <ul>
+                  {e.diagnosisCodes?.map(c => <li key={c}>{c}</li>)}
+                </ul> 
+                }
+              </div>)
+          }
         </Container>
       </div>
     );

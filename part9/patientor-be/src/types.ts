@@ -4,7 +4,6 @@ export interface Diagnose {
   latin?: string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface BaseEntry {
   id: string;
   description: string;
@@ -27,13 +26,11 @@ export enum EntryType {
 }
 
 interface HealthCheckEntry extends BaseEntry {
-  // type: EntryType.HealthCheck;
   type: 'HealthCheck';
   healthCheckRating: HealthCheckRating;
 }
 
 interface OccupationalHealthCareEntry extends BaseEntry {
-  // type: EntryType.OccupationalHealthcare;
   type: 'OccupationalHealthcare';
   employerName: string;
   sickLeave?: {
@@ -43,7 +40,6 @@ interface OccupationalHealthCareEntry extends BaseEntry {
 }
 
 interface HospitalEntry extends BaseEntry {
-  // type: EntryType.Hospital;
   type: 'Hospital';
   discharge: {
     date: string;
