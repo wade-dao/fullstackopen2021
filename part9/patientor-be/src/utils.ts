@@ -1,4 +1,4 @@
-import { NewPatient, Gender, Entry, EntryType } from "./types";
+import { NewPatient, Gender, Entry, EntryType, NewEntry, HealthCheckRating } from "./types";
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -16,8 +16,20 @@ const isEntryType = (param: any): param is EntryType => {
   return Object.values(EntryType).includes(param);
 };
 
+const isHealthCheckRating = (param: any): param is HealthCheckRating => {
+  return Object.values(HealthCheckRating).includes(param);
+};
+
+const isDischarge = (param: any): param is { date: string, criteria: string } => {
+  return isString(param.date) && isString (param.criteria);
+}
+
+const isSickLeave = (param: any): param is { startDate: string, endDate: string } => {
+  return isString(param.startDate) && isString (param.endDate);
+}
+
 type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown, occupation: unknown, entries: unknown };
-const toNewPatientEntry = ({ name, dateOfBirth, ssn, gender, occupation, entries }: Fields): NewPatient => {
+export const toNewPatientEntry = ({ name, dateOfBirth, ssn, gender, occupation, entries }: Fields): NewPatient => {
   const newPatientEntry: NewPatient = {
     name: parseName(name),
     dateOfBirth: parseDOB(dateOfBirth),
@@ -70,17 +82,153 @@ const parseDOB = (dob: unknown): string => {
 };
 
 const parseEntries = (entries: unknown): Entry[] => {
-  if (!entries || !Array.isArray(entries)) {
-    throw new Error('Incorrect or missing entries: ' + entries);
+  if (entries)
+  {
+    if (!Array.isArray(entries)) {
+      throw new Error('Incorrect or missing entries: ' + entries);
+    }
+
+    entries.forEach(e => {
+      parseEntryType(e.type);
+    });
+    return entries;
+  }
+  else
+    return [];
+}
+
+//Patient's Entry Validation
+const parseEntryType = (type: unknown): EntryType => {
+  if (!type || !isEntryType(type)) {
+    throw new Error('Incorrect or missing type:' + type);
   }
 
-  entries.forEach(e => {
-    if (!e.type || !isEntryType(e.type)) {
-      throw new Error('Incorrect or missing type in entry : ' + e.id);
+  return type;
+};
+
+const parseDescription = (description: unknown): string => {
+  if (!description || !isString(description)) {
+    throw new Error('Incorrect or missing description');
+  }
+
+  return description;
+};
+
+const parseDOE = (doe: unknown): string => {
+  if (!doe || !isString(doe) || !isDate(doe)) {
+    throw new Error('Incorrect or missing dateOfEntry: ' + doe);
+  }
+  return doe;
+};
+
+const parseSpecialist = (specialist: unknown): string => {
+  if (!specialist || !isString(specialist)) {
+    throw new Error('Incorrect or missing specialist');
+  }
+
+  return specialist;
+};
+
+const parseDiagnosisCodes = (diagnosisCodes: unknown): Array<string> => {
+  if (!diagnosisCodes || !Array.isArray(diagnosisCodes)) {
+    throw new Error('Incorrect or missing entries: ' + diagnosisCodes);
+  }
+
+  diagnosisCodes.forEach(c => {
+    if (!isString(c)) {
+      throw new Error('Incorrect or missing code: ' + c);
     }
   });
 
-  return entries;
-}
+  return diagnosisCodes;
+};
 
-export default toNewPatientEntry;
+const parseHealthCheckRating = (healthCheckRating: unknown): HealthCheckRating => {
+  if (!healthCheckRating || !isHealthCheckRating(healthCheckRating)) {
+    throw new Error('Incorrect or missing healthCheckRating:' + healthCheckRating);
+  }
+
+  return healthCheckRating;
+};
+
+const parseDischarge = (discharge: unknown): { date: string, criteria: string } => {
+  if (!discharge || !isDischarge(discharge)) {
+    throw new Error('Incorrect or missing discharge: ' + discharge);
+  }
+  return discharge;
+};
+
+const parseEmployerName = (employerName: unknown): string => {
+  if (!employerName || !isString(employerName)) {
+    throw new Error('Incorrect or missing employerName');
+  }
+
+  return employerName;
+};
+
+const parseSickLeave = (sickLeave: unknown): { startDate: string, endDate: string } | undefined => {
+  if (sickLeave)
+  {
+    if (!isSickLeave(sickLeave)) {
+      throw new Error('Incorrect or missing sickLeave: ' + sickLeave);
+    }
+    return sickLeave;
+  }
+  else
+    return undefined;
+};
+
+type EntryFields = {
+  description: unknown,
+  date: unknown,
+  specialist: unknown,
+  diagnosisCodes?: unknown,
+  type: unknown,
+  healthCheckRating?: unknown,
+  employerName?: unknown,
+  sickLeave?: unknown,
+  discharge?: unknown
+};
+export const toNewEntryOfPatient = ({ description, date, specialist, diagnosisCodes, type, healthCheckRating, employerName, sickLeave, discharge }: EntryFields): NewEntry => {
+  const validatedType = parseEntryType(type);
+
+  let validatedDiagnosisCodes: Array<string> = [];
+  if (diagnosisCodes)
+    validatedDiagnosisCodes = parseDiagnosisCodes(diagnosisCodes);
+
+  switch (true) {
+    case (validatedType === EntryType.HealthCheck):
+      const newHealthCheckEntry: NewEntry = {
+        description: parseDescription(description),
+        date: parseDOE(date),
+        specialist: parseSpecialist(specialist),
+        diagnosisCodes: validatedDiagnosisCodes.length !== 0 ? validatedDiagnosisCodes : undefined,
+        type: 'HealthCheck',
+        healthCheckRating: parseHealthCheckRating(healthCheckRating)
+      };
+      return newHealthCheckEntry;
+    case (validatedType === EntryType.Hospital):
+      const newHospitalEntry: NewEntry = {
+        description: parseDescription(description),
+        date: parseDOE(date),
+        specialist: parseSpecialist(specialist),
+        diagnosisCodes: validatedDiagnosisCodes.length !== 0 ? validatedDiagnosisCodes : undefined,
+        type: 'Hospital',
+        discharge: parseDischarge(discharge)
+      };
+      return newHospitalEntry;
+    case (validatedType === EntryType.OccupationalHealthcare):
+      const newOccupationalHealthcareEntry: NewEntry = {
+        description: parseDescription(description),
+        date: parseDOE(date),
+        specialist: parseSpecialist(specialist),
+        diagnosisCodes: validatedDiagnosisCodes.length !== 0 ? validatedDiagnosisCodes : undefined,
+        type: 'OccupationalHealthcare',
+        employerName: parseEmployerName(employerName),
+        sickLeave: parseSickLeave(sickLeave)
+      };
+      return newOccupationalHealthcareEntry;
+    default:
+      throw new Error('Incorrect or missing type:' + validatedType);;
+  }  
+};

@@ -1,11 +1,11 @@
 import express from 'express';
 import patientService from '../services/patientService';
-import toNewPatientEntry from '../utils';
+import { toNewPatientEntry, toNewEntryOfPatient } from '../utils';
 
 const router = express.Router();
 
 router.get('/:id', (req, res) => {
-  const patient = patientService.getEntry(req.params.id);
+  const patient = patientService.getPatient(req.params.id);
   if (patient) {
     res.send(patient);
   } else {
@@ -14,14 +14,26 @@ router.get('/:id', (req, res) => {
 });
 
 router.get('/', (_req, res) => {
-  const nonSsnPatients = patientService.getPublicEntries();
-  res.send(nonSsnPatients);
+  const publicPatients = patientService.getPublicPatients();
+  res.send(publicPatients);
+});
+
+router.post('/:id/entries', (req, res) => {
+  console.log('hey');
+  try {
+    const newEntry = toNewEntryOfPatient(req.body);
+    const updatedPatient = patientService.addPatientEntry(req.params.id, newEntry);
+    res.json(updatedPatient);
+  }
+  catch (e) {
+    res.status(400).send(e.message);
+  }
 });
 
 router.post('/', (req, res) => {
   try {
     const newPatientEntry = toNewPatientEntry(req.body);
-    const addedPatient = patientService.addEntry(newPatientEntry);
+    const addedPatient = patientService.addPatient(newPatientEntry);
     res.json(addedPatient);
   }
   catch (e) {

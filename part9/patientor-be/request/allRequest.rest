@@ -8,3 +8,22 @@ Content-Type: application/json
   "gender": "male",
   "occupation": "QA"
 }
+
+###
+POST http://localhost:3003/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+  "date": "2016-01-02",
+  "type": "OccupationalHealthcare",
+  "specialist": "MD House",
+  "description":
+    "I don't know.",
+  "employerName": "MYSELF",
+  "discharge": {
+    "date": "2016-01-02",
+    "criteria": "Thumb has lost."
+  }
+}
+
+### "diagnosisCodes": ["S62.5"],
