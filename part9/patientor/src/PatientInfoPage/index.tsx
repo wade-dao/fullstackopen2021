@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Button, Card, Container, Icon, Rating } from "semantic-ui-react";
 
-import { Gender, Patient, HealthCheckEntry, OccupationalHealthCareEntry, HospitalEntry, Diagnosis, NewHealthCheckEntry, NewHospitalEntry } from "../types";
+import { Gender, Patient, HealthCheckEntry, OccupationalHealthCareEntry, HospitalEntry, Diagnosis, NewHealthCheckEntry, NewHospitalEntry, NewOccupationalHealthCareEntry } from "../types";
 import { apiBaseUrl } from "../constants";
 import { setPatientInfo, useStateValue } from "../state";
 import { useParams } from "react-router-dom";
@@ -40,7 +40,7 @@ const PatientInfoPage = () => {
     setError(undefined);
   };
 
-  const submitNewPatientEntry = async (values: NewHealthCheckEntry | NewHospitalEntry) => {
+  const submitNewPatientEntry = async (values: NewHealthCheckEntry | NewHospitalEntry | NewOccupationalHealthCareEntry) => {
     try {
       if (!patient || typeof patient === 'undefined') {
         setError('Missing Patient error');

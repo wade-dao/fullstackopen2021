@@ -21,11 +21,36 @@ const isHealthCheckRating = (param: any): param is HealthCheckRating => {
 };
 
 const isDischarge = (param: any): param is { date: string, criteria: string } => {
-  return isString(param.date) && isString (param.criteria) && isDate(param.date);
+  if (!isString(param.date))
+    throw new Error('Incorrect discharge date: ' + param.date);
+  
+  if (!isDate(param.date))
+    throw new Error('Incorrect discharge date: ' + param.date);
+
+  if (!isString(param.criteria))
+    throw new Error('Incorrect discharge criteria: ' + param.criteria);
+  
+  return isString(param.date) && isString(param.criteria) && isDate(param.date);
 }
 
 const isSickLeave = (param: any): param is { startDate: string, endDate: string } => {
-  return isString(param.startDate) && isDate(param.startDate) && isString (param.endDate) && isDate(param.endDate);
+  if (param.startDate !== "" && param.endDate !== "") {
+    if (!isString(param.startDate))
+      throw new Error('Incorrect startDate: ' + param.startDate);
+    
+    if (!isDate(param.startDate))
+      throw new Error('Incorrect startDate: ' + param.startDate);
+
+    if (!isString(param.endDate))
+      throw new Error('Incorrect endDate: ' + param.endDate);
+    
+    if (!isDate(param.endDate))
+      throw new Error('Incorrect endDate: ' + param.endDate);
+
+    return isString(param.startDate) && isDate(param.startDate) && isString (param.endDate) && isDate(param.endDate);
+  } else {
+    return true;
+  }
 }
 
 type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown, occupation: unknown, entries: unknown };
@@ -174,11 +199,12 @@ const parseEmployerName = (employerName: unknown): string => {
 };
 
 const parseSickLeave = (sickLeave: unknown): { startDate: string, endDate: string } | undefined => {
-  if (sickLeave)
-  {
-    if (!isSickLeave(sickLeave)) {
-      throw new Error('Incorrect or missing sickLeave: ' + sickLeave);
-    }
+
+  if (!isSickLeave(sickLeave)) {
+    throw new Error('Incorrect or missing sickLeave: ' + sickLeave);
+  }
+  
+  if (sickLeave.startDate !== "" && sickLeave.endDate !== "") {
     return sickLeave;
   }
   else

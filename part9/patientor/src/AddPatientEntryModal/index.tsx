@@ -1,13 +1,14 @@
 import React from 'react';
 import { Dropdown, Modal, Segment } from 'semantic-ui-react';
-import { EntryType, NewHealthCheckEntry, NewHospitalEntry } from '../types';
+import { EntryType, NewHealthCheckEntry, NewHospitalEntry, NewOccupationalHealthCareEntry } from '../types';
 import AddHealthCheckEntryForm from './AddHealthCheckEntryForm';
 import AddHospitalEntryForm from './AddHospitalEntryForm';
+import AddOccupationalHealthCareEntryForm from './AddOccupationalHealthCareEntryForm';
 
 interface Props {
   modalOpen: boolean;
   onClose: () => void;
-  onSubmit: (values: NewHealthCheckEntry | NewHospitalEntry) => void;
+  onSubmit: (values: NewHealthCheckEntry | NewHospitalEntry | NewOccupationalHealthCareEntry) => void;
   error?: string;
 }
 
@@ -25,6 +26,7 @@ const AddPatientEntryModal = ({ modalOpen, onClose, onSubmit, error }: Props) =>
       <Modal.Header>Add a new entry</Modal.Header>
       <Modal.Content>
         {error && <Segment inverted color="red">{`Error: ${error}`}</Segment>}
+        <p><strong>Type of entry</strong></p>
         <Dropdown
           placeholder="Select entry type"
           fluid
@@ -34,6 +36,7 @@ const AddPatientEntryModal = ({ modalOpen, onClose, onSubmit, error }: Props) =>
         />
         <AddHealthCheckEntryForm onSubmit={onSubmit} onCancel={onClose} show={entryType === "HealthCheck"}/>
         <AddHospitalEntryForm onSubmit={onSubmit} onCancel={onClose} show={entryType === "Hospital"}/>
+        <AddOccupationalHealthCareEntryForm onSubmit={onSubmit} onCancel={onClose} show={entryType === "OccupationalHealthcare"}/>
       </Modal.Content>
     </Modal>
   );
