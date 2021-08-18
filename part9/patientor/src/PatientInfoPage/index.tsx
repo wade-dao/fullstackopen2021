@@ -1,13 +1,17 @@
 import React from "react";
 import axios from "axios";
-import { Card, Container, Icon, Rating } from "semantic-ui-react";
+import { Button, Card, Container, Icon, Rating } from "semantic-ui-react";
 
-import { Gender, Patient, HealthCheckEntry, OccupationalHealthCareEntry, HospitalEntry, Diagnosis } from "../types";
+import { Gender, Patient, HealthCheckEntry, OccupationalHealthCareEntry, HospitalEntry, Diagnosis, NewHealthCheckEntry } from "../types";
 import { apiBaseUrl } from "../constants";
 import { setPatientInfo, useStateValue } from "../state";
 import { useParams } from "react-router-dom";
+import AddPatientEntryModal from "../AddPatientEntryModal";
 
 const PatientInfoPage = () => {
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | undefined>();
+
   const [{ patients, diagnoses }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
   const patient = Object.values(patients).find(p => p.id === id);
@@ -27,7 +31,34 @@ const PatientInfoPage = () => {
     if ((patient && (!patient?.ssn || typeof(!patient.ssn) === undefined || (!patient.ssn))) || !patient) {
       void fetchPatientInfo();
     }
-  }, [dispatch]);
+  }, [dispatch, patient]);
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
+
+  const submitNewPatientEntry = async (values: NewHealthCheckEntry) => {
+    try {
+      if (!patient || typeof patient === 'undefined') {
+        console.error('Missing Patient Error');
+        setError('Missing Patient error');
+      }
+      else {
+        const { data: newPatient } = await axios.post<Patient>(
+          `${apiBaseUrl}/api/patients/${patient.id}/entries`,
+          values
+        );
+        dispatch(setPatientInfo(newPatient));
+        closeModal();
+      }
+    } catch (e) {
+      console.error(e.response?.data || 'Unknown Error');
+      setError(e.response?.data?.error || 'Unknown error');
+    }
+  };
 
   const assertNever = (value: never): never => {
     throw new Error(
@@ -45,9 +76,8 @@ const PatientInfoPage = () => {
           </Card.Header>
           <Card.Meta><em>{props.description}</em></Card.Meta>
           {typeof props.diagnosisCodes === 'undefined'
-          ? null
-          : <DiagnosisList list={props.diagnosisCodes}/> 
-          // : <DiagnosisList list={props.diagnosisCodes}/>
+            ? null
+            : <DiagnosisList list={props.diagnosisCodes}/> 
           }
           <Card.Description>
             <Rating icon="heart" disabled rating={4 - props.healthCheckRating} maxRating={4} />
@@ -68,8 +98,8 @@ const PatientInfoPage = () => {
           </Card.Header>
           <Card.Meta><em>{props.description}</em></Card.Meta>
           {typeof props.diagnosisCodes === 'undefined'
-          ? null
-          : <DiagnosisList list={props.diagnosisCodes}/> 
+            ? null
+            : <DiagnosisList list={props.diagnosisCodes}/> 
           }
         </Card.Content>
       </Card>
@@ -136,6 +166,13 @@ const PatientInfoPage = () => {
               }
             })
           }
+          <AddPatientEntryModal
+            modalOpen={modalOpen}
+            onSubmit={submitNewPatientEntry}
+            error={error}
+            onClose={closeModal}
+          />
+          <Button onClick={() => openModal()}>Add New Entry</Button>
         </Container>
       </div>
     );

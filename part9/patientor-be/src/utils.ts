@@ -204,7 +204,7 @@ export const toNewEntryOfPatient = ({ description, date, specialist, diagnosisCo
         specialist: parseSpecialist(specialist),
         diagnosisCodes: validatedDiagnosisCodes.length !== 0 ? validatedDiagnosisCodes : undefined,
         type: 'HealthCheck',
-        healthCheckRating: parseHealthCheckRating(healthCheckRating)
+        healthCheckRating: parseHealthCheckRating(Number(healthCheckRating))
       };
       return newHealthCheckEntry;
     case (validatedType === EntryType.Hospital):

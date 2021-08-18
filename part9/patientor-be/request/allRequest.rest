@@ -15,7 +15,7 @@ Content-Type: application/json
 
 {
   "date": "2016-01-02",
-  "type": "OccupationalHealthcare",
+  "type": "HealthCheck",
   "specialist": "MD House",
   "description":
     "I don't know.",
