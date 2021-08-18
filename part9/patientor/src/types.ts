@@ -68,3 +68,4 @@ type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit
 // Define Entry without the 'id' property
 export type NewEntry = UnionOmit<Entry, 'id'>;
 export type NewHealthCheckEntry = Omit<HealthCheckEntry, 'id'>;
+export type NewHospitalEntry = Omit<HospitalEntry, 'id'>;

@@ -1,4 +1,4 @@
-import { NewPatient, Gender, EntryType, NewEntry, HealthCheckRating } from "./types";
+import { NewPatient, Gender, EntryType, NewEntry, HealthCheckRating, Entry } from "./types";
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -21,22 +21,22 @@ const isHealthCheckRating = (param: any): param is HealthCheckRating => {
 };
 
 const isDischarge = (param: any): param is { date: string, criteria: string } => {
-  return isString(param.date) && isString (param.criteria);
+  return isString(param.date) && isString (param.criteria) && isDate(param.date);
 }
 
 const isSickLeave = (param: any): param is { startDate: string, endDate: string } => {
-  return isString(param.startDate) && isString (param.endDate);
+  return isString(param.startDate) && isDate(param.startDate) && isString (param.endDate) && isDate(param.endDate);
 }
 
-type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown, occupation: unknown };
-export const toNewPatientEntry = ({ name, dateOfBirth, ssn, gender, occupation }: Fields): NewPatient => {
+type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown, occupation: unknown, entries: unknown };
+export const toNewPatientEntry = ({ name, dateOfBirth, ssn, gender, occupation, entries }: Fields): NewPatient => {
   const newPatientEntry: NewPatient = {
     name: parseName(name),
     dateOfBirth: parseDOB(dateOfBirth),
     ssn: parseSsn(ssn),
     gender: parseGender(gender),
     occupation: parseOccupation(occupation),
-    entries: []
+    entries: parseEntries(entries)
   };
 
   return newPatientEntry;
@@ -81,21 +81,24 @@ const parseDOB = (dob: unknown): string => {
   return dob;
 };
 
-// const parseEntries = (entries: unknown): Entry[] => {
-//   if (entries)
-//   {
-//     if (!Array.isArray(entries)) {
-//       throw new Error('Incorrect or missing entries: ' + entries);
-//     }
+const parseEntries = (entries: unknown): Entry[] => {
+  if (entries)
+  {
+    if (!Array.isArray(entries)) {
+      throw new Error('Incorrect or missing entries: ' + entries);
+    }
 
-//     entries.forEach(e => {
-//       parseEntryType(e.type);
-//     });
-//     return entries;
-//   }
-//   else
-//     return [];
-// }
+    entries.forEach(e => {
+      parseEntryType(e.type);
+      parseDescription(e.description);
+      parseDOE(e.date);
+      parseSpecialist(e.specialist);
+    });
+    return entries;
+  }
+  else
+    return [];
+}
 
 //Patient's Entry Validation
 const parseEntryType = (type: unknown): EntryType => {
@@ -145,7 +148,6 @@ const parseDiagnosisCodes = (diagnosisCodes: unknown): Array<string> => {
 
 const parseHealthCheckRating = (healthCheckRating: Number): HealthCheckRating => {
   if (!healthCheckRating || !isHealthCheckRating(healthCheckRating)) {
-    // console.log(healthCheckRating);
     throw new Error('Incorrect or missing healthCheckRating:' + healthCheckRating);
   }
 
@@ -153,8 +155,12 @@ const parseHealthCheckRating = (healthCheckRating: Number): HealthCheckRating =>
 };
 
 const parseDischarge = (discharge: unknown): { date: string, criteria: string } => {
-  if (!discharge || !isDischarge(discharge)) {
-    throw new Error('Incorrect or missing discharge: ' + discharge);
+  if (!discharge) {
+    throw new Error('Missing discharge: ' + discharge);
+  }
+
+  if (!isDischarge(discharge)) {
+    throw new Error('Incorrect discharge: ' + discharge);
   }
   return discharge;
 };

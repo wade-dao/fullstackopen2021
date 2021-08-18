@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Button, Card, Container, Icon, Rating } from "semantic-ui-react";
 
-import { Gender, Patient, HealthCheckEntry, OccupationalHealthCareEntry, HospitalEntry, Diagnosis, NewHealthCheckEntry } from "../types";
+import { Gender, Patient, HealthCheckEntry, OccupationalHealthCareEntry, HospitalEntry, Diagnosis, NewHealthCheckEntry, NewHospitalEntry } from "../types";
 import { apiBaseUrl } from "../constants";
 import { setPatientInfo, useStateValue } from "../state";
 import { useParams } from "react-router-dom";
@@ -40,7 +40,7 @@ const PatientInfoPage = () => {
     setError(undefined);
   };
 
-  const submitNewPatientEntry = async (values: NewHealthCheckEntry) => {
+  const submitNewPatientEntry = async (values: NewHealthCheckEntry | NewHospitalEntry) => {
     try {
       if (!patient || typeof patient === 'undefined') {
         setError('Missing Patient error');
@@ -66,7 +66,7 @@ const PatientInfoPage = () => {
 
   const HealthCheckEntry = (props: HealthCheckEntry) => {
     return (
-      <Card key={props.id}>
+      <Card>
         <Card.Content>
           <Card.Header>
             {props.date} 
@@ -87,7 +87,7 @@ const PatientInfoPage = () => {
 
   const OccupationalHealthcare = (props: OccupationalHealthCareEntry) => {
     return (
-      <Card key={props.id}>
+      <Card>
         <Card.Content>
           <Card.Header>
             {props.date} 
@@ -125,7 +125,7 @@ const PatientInfoPage = () => {
 
   const Hospital = (props: HospitalEntry) => {
     return (
-      <Card key={props.id}>
+      <Card>
         <Card.Content>
           <Card.Header>
             {props.date}
@@ -154,11 +154,11 @@ const PatientInfoPage = () => {
             patient.entries.map(e => {
               switch (e.type) {
                 case 'Hospital':
-                  return <Hospital {...e} />;
+                  return <Hospital key={e.id} {...e} />;
                 case 'HealthCheck':
-                  return <HealthCheckEntry {...e} />;
+                  return <HealthCheckEntry key={e.id} {...e} />;
                 case 'OccupationalHealthcare':
-                  return <OccupationalHealthcare {...e} />;
+                  return <OccupationalHealthcare key={e.id} {...e} />;
                 default:
                   return assertNever(e);
               }

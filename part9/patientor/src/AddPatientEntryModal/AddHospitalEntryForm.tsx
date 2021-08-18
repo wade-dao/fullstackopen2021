@@ -2,8 +2,8 @@ import React from "react";
 import { Grid, Button } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik";
 
-import { TextField, SelectFieldHealthCheckRating, HealthCheckRatingOption, DiagnosisSelection } from "./FormFieldEntry";
-import { HealthCheckRating, NewHealthCheckEntry } from "../types";
+import { TextField, DiagnosisSelection } from "./FormFieldEntry";
+import { NewHospitalEntry } from "../types";
 import { useStateValue } from "../state";
 
 /*
@@ -12,19 +12,12 @@ import { useStateValue } from "../state";
  */
 
 interface Props {
-  onSubmit: (values: NewHealthCheckEntry) => void;
+  onSubmit: (values: NewHospitalEntry) => void;
   onCancel: () => void;
   show: boolean;
 }
 
-const healthCheckRatingOptions: HealthCheckRatingOption[] = [
-  { value: HealthCheckRating.Healthy, label: "Healthy" },
-  { value: HealthCheckRating.LowRisk, label: "Low Risk" },
-  { value: HealthCheckRating.HighRisk, label: "High Risk" },
-  { value: HealthCheckRating.CriticalRisk, label: "Critical Risk" }
-];
-
-export const AddHealthCheckEntryForm = ({ onSubmit, onCancel, show } : Props ) => {
+export const AddHospitalEntryForm = ({ onSubmit, onCancel, show } : Props ) => {
   const [{ diagnoses }, ] = useStateValue();
   
   if (!show) {
@@ -34,12 +27,15 @@ export const AddHealthCheckEntryForm = ({ onSubmit, onCancel, show } : Props ) =
   return (
     <Formik
       initialValues={{
-        type: "HealthCheck",
+        type: "Hospital",
         description: "",
         date: "",
         specialist: "",
         diagnosisCodes: [],
-        healthCheckRating: HealthCheckRating.Healthy
+        discharge: {
+          date: "",
+          criteria: ""
+        }
       }}
       onSubmit={onSubmit}
       validate={values => {
@@ -54,8 +50,11 @@ export const AddHealthCheckEntryForm = ({ onSubmit, onCancel, show } : Props ) =
         if (!values.specialist) {
           errors.specialist = requiredError;
         }
-        if (!values.healthCheckRating) {
-          errors.healthCheckRating = requiredError;
+        if (!values.discharge.date) {
+          errors.discharge = requiredError;
+        }
+        if (!values.discharge.criteria) {
+          errors.discharge = requiredError;
         }
         return errors;
       }}
@@ -81,16 +80,23 @@ export const AddHealthCheckEntryForm = ({ onSubmit, onCancel, show } : Props ) =
               name="specialist"
               component={TextField}
             />
-            <SelectFieldHealthCheckRating
-              label="Health Rating"
-              name="healthCheckRating"
-              options={healthCheckRatingOptions}
-            />
             <DiagnosisSelection
               diagnoses={Object.values(diagnoses)}
               setFieldValue={setFieldValue}
               setFieldTouched={setFieldTouched}
-             />
+            />
+            <Field
+              label="Discharge Date"
+              placeholder="Date of discharge"
+              name="discharge.date"
+              component={TextField}
+            />
+            <Field
+              label="Discharge Criteria"
+              placeholder="Criteria of discharge"
+              name="discharge.criteria"
+              component={TextField}
+            />
             <Grid>
               <Grid.Column floated="left" width={5}>
                 <Button type="button" onClick={onCancel} color="red">
@@ -115,4 +121,4 @@ export const AddHealthCheckEntryForm = ({ onSubmit, onCancel, show } : Props ) =
   );
 };
 
-export default AddHealthCheckEntryForm;
+export default AddHospitalEntryForm;

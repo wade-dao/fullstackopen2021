@@ -1,12 +1,13 @@
 import React from 'react';
 import { Dropdown, Modal, Segment } from 'semantic-ui-react';
-import { EntryType, NewHealthCheckEntry } from '../types';
+import { EntryType, NewHealthCheckEntry, NewHospitalEntry } from '../types';
 import AddHealthCheckEntryForm from './AddHealthCheckEntryForm';
+import AddHospitalEntryForm from './AddHospitalEntryForm';
 
 interface Props {
   modalOpen: boolean;
   onClose: () => void;
-  onSubmit: (values: NewHealthCheckEntry) => void;
+  onSubmit: (values: NewHealthCheckEntry | NewHospitalEntry) => void;
   error?: string;
 }
 
@@ -32,6 +33,7 @@ const AddPatientEntryModal = ({ modalOpen, onClose, onSubmit, error }: Props) =>
           onChange={(_event, data) => {setEntryType(String(data.value));}}
         />
         <AddHealthCheckEntryForm onSubmit={onSubmit} onCancel={onClose} show={entryType === "HealthCheck"}/>
+        <AddHospitalEntryForm onSubmit={onSubmit} onCancel={onClose} show={entryType === "Hospital"}/>
       </Modal.Content>
     </Modal>
   );
