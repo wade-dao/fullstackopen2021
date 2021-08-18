@@ -17,12 +17,6 @@ interface Props {
   show: boolean;
 }
 
-// const entryTypeOptions: EntryTypeOption[] = [
-//   { value: EntryType.HealthCheck, label: "HealthCheck" },
-//   { value: EntryType.Hospital, label: "Hospital" },
-//   { value: EntryType.OccupationalHealthcare, label: "OccupationalHealthcare" },
-// ];
-
 const healthCheckRatingOptions: HealthCheckRatingOption[] = [
   { value: HealthCheckRating.Healthy, label: "Healthy" },
   { value: HealthCheckRating.LowRisk, label: "Low Risk" },

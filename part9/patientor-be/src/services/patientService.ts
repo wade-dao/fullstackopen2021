@@ -29,7 +29,8 @@ const addPatient = (entry: NewPatient): PublicPatient => {
     name: newEntry.name,
     dateOfBirth: newEntry.dateOfBirth,
     gender: newEntry.gender,
-    occupation: newEntry.occupation
+    occupation: newEntry.occupation,
+    entries: newEntry.entries
   };
   return newNon;
 };

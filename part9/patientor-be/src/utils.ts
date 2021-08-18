@@ -1,4 +1,4 @@
-import { NewPatient, Gender, Entry, EntryType, NewEntry, HealthCheckRating } from "./types";
+import { NewPatient, Gender, EntryType, NewEntry, HealthCheckRating } from "./types";
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -28,15 +28,15 @@ const isSickLeave = (param: any): param is { startDate: string, endDate: string 
   return isString(param.startDate) && isString (param.endDate);
 }
 
-type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown, occupation: unknown, entries: unknown };
-export const toNewPatientEntry = ({ name, dateOfBirth, ssn, gender, occupation, entries }: Fields): NewPatient => {
+type Fields = { name: unknown, dateOfBirth: unknown, ssn: unknown, gender: unknown, occupation: unknown };
+export const toNewPatientEntry = ({ name, dateOfBirth, ssn, gender, occupation }: Fields): NewPatient => {
   const newPatientEntry: NewPatient = {
     name: parseName(name),
     dateOfBirth: parseDOB(dateOfBirth),
     ssn: parseSsn(ssn),
     gender: parseGender(gender),
     occupation: parseOccupation(occupation),
-    entries: parseEntries(entries)
+    entries: []
   };
 
   return newPatientEntry;
@@ -81,21 +81,21 @@ const parseDOB = (dob: unknown): string => {
   return dob;
 };
 
-const parseEntries = (entries: unknown): Entry[] => {
-  if (entries)
-  {
-    if (!Array.isArray(entries)) {
-      throw new Error('Incorrect or missing entries: ' + entries);
-    }
+// const parseEntries = (entries: unknown): Entry[] => {
+//   if (entries)
+//   {
+//     if (!Array.isArray(entries)) {
+//       throw new Error('Incorrect or missing entries: ' + entries);
+//     }
 
-    entries.forEach(e => {
-      parseEntryType(e.type);
-    });
-    return entries;
-  }
-  else
-    return [];
-}
+//     entries.forEach(e => {
+//       parseEntryType(e.type);
+//     });
+//     return entries;
+//   }
+//   else
+//     return [];
+// }
 
 //Patient's Entry Validation
 const parseEntryType = (type: unknown): EntryType => {
@@ -131,7 +131,7 @@ const parseSpecialist = (specialist: unknown): string => {
 
 const parseDiagnosisCodes = (diagnosisCodes: unknown): Array<string> => {
   if (!diagnosisCodes || !Array.isArray(diagnosisCodes)) {
-    throw new Error('Incorrect or missing entries: ' + diagnosisCodes);
+    throw new Error('Incorrect diagnosisCodes: ' + diagnosisCodes);
   }
 
   diagnosisCodes.forEach(c => {
@@ -143,8 +143,9 @@ const parseDiagnosisCodes = (diagnosisCodes: unknown): Array<string> => {
   return diagnosisCodes;
 };
 
-const parseHealthCheckRating = (healthCheckRating: unknown): HealthCheckRating => {
+const parseHealthCheckRating = (healthCheckRating: Number): HealthCheckRating => {
   if (!healthCheckRating || !isHealthCheckRating(healthCheckRating)) {
+    // console.log(healthCheckRating);
     throw new Error('Incorrect or missing healthCheckRating:' + healthCheckRating);
   }
 
@@ -193,8 +194,9 @@ export const toNewEntryOfPatient = ({ description, date, specialist, diagnosisCo
   const validatedType = parseEntryType(type);
 
   let validatedDiagnosisCodes: Array<string> = [];
-  if (diagnosisCodes)
+  if (diagnosisCodes) {
     validatedDiagnosisCodes = parseDiagnosisCodes(diagnosisCodes);
+  }
 
   switch (true) {
     case (validatedType === EntryType.HealthCheck):

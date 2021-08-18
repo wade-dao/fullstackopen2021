@@ -24,7 +24,7 @@ const PatientInfoPage = () => {
         );
         dispatch(setPatientInfo(patientInfoFromApi));
       } catch (e) {
-        console.error(e);
+        setError(e.response?.data);
       }
     };
 
@@ -43,7 +43,6 @@ const PatientInfoPage = () => {
   const submitNewPatientEntry = async (values: NewHealthCheckEntry) => {
     try {
       if (!patient || typeof patient === 'undefined') {
-        console.error('Missing Patient Error');
         setError('Missing Patient error');
       }
       else {
@@ -55,8 +54,7 @@ const PatientInfoPage = () => {
         closeModal();
       }
     } catch (e) {
-      console.error(e.response?.data || 'Unknown Error');
-      setError(e.response?.data?.error || 'Unknown error');
+      setError(e.response?.data);
     }
   };
 

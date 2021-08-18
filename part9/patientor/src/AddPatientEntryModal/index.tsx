@@ -2,7 +2,6 @@ import React from 'react';
 import { Dropdown, Modal, Segment } from 'semantic-ui-react';
 import { EntryType, NewHealthCheckEntry } from '../types';
 import AddHealthCheckEntryForm from './AddHealthCheckEntryForm';
-// import { EntryTypeOption } from './FormFieldEntry';
 
 interface Props {
   modalOpen: boolean;
